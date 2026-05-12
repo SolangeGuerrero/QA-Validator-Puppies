@@ -16,7 +16,7 @@ export async function setupRagSchema(): Promise<void> {
     CREATE TABLE IF NOT EXISTS rag_chunks (
       id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
       content       TEXT NOT NULL,
-      embedding     vector(768),
+      embedding     vector(384),
       validation_id TEXT REFERENCES validations(id) ON DELETE CASCADE,
       product_id    TEXT,
       brand         TEXT,

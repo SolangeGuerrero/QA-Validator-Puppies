@@ -6,16 +6,16 @@ const router = Router()
 
 // GET /agents — provider status + validation stats
 router.get('/', requireAuth, async (_req, res) => {
-  const activeProvider = process.env.AI_PROVIDER ?? 'gemini'
+  const activeProvider = process.env.AI_PROVIDER ?? 'claude'
 
   const providers = [
     {
-      id: 'gemini',
-      name: 'Google Gemini',
-      model: 'gemini-2.0-flash',
-      origin: 'Google Cloud',
-      configured: !!(process.env.GEMINI_API_KEY),
-      active: 'gemini' === activeProvider,
+      id: 'claude',
+      name: 'Anthropic Claude',
+      model: process.env.ANTHROPIC_MODEL ?? 'claude-haiku-4-5-20251001',
+      origin: 'Anthropic',
+      configured: !!(process.env.ANTHROPIC_API_KEY),
+      active: 'claude' === activeProvider,
     },
   ]
 

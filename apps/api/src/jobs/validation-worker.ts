@@ -4,7 +4,7 @@ import { createHash } from 'crypto'
 import { prisma } from '../lib/prisma.js'
 import { getFileBuffer, uploadFileToStorage, insforgeAdmin } from '../lib/insforge.js'
 import { getOrConvertPdfToPng } from '../lib/pdf-to-image.js'
-import { validateCreativeWithGemini } from '../services/ai-engine/gemini.js'
+import { validateCreativeWithClaude } from '../services/ai-engine/claude.js'
 import { retrieve, indexValidation } from '../services/rag.js'
 
 // In-process async queue (replaces BullMQ to avoid Upstash REST/TCP mismatch)
@@ -131,14 +131,14 @@ async function processValidation(validationId: string) {
     const llmCachePath = `llm-cache/${cacheKey}.json`
     const llmCacheUrl = insforgeAdmin.storage.from('creatives').getPublicUrl(llmCachePath).data.publicUrl
 
-    let result: Awaited<ReturnType<typeof validateCreativeWithGemini>>
+    let result: Awaited<ReturnType<typeof validateCreativeWithClaude>>
     try {
       const cached = await getFileBuffer(llmCacheUrl)
       result = JSON.parse(cached.toString('utf8'))
       console.log(`[LLM] cache hit (${cacheKey.slice(0, 12)})`)
     } catch {
       console.log(`[LLM] cache miss (${cacheKey.slice(0, 12)}), calling ${provider}…`)
-      result = await validateCreativeWithGemini(imageBase64, mediaType, productCtx, documentTexts, ragContext)
+      result = await validateCreativeWithClaude(imageBase64, mediaType, productCtx, documentTexts, ragContext)
       uploadFileToStorage('creatives', llmCachePath, Buffer.from(JSON.stringify(result)), 'application/json')
         .catch(err => console.warn(`[LLM] failed to write cache:`, err))
     }

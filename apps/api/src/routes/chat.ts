@@ -1,11 +1,12 @@
 import { Router } from 'express'
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import Anthropic from '@anthropic-ai/sdk'
 import { requireAuth } from '../middleware/auth.js'
 import { asyncHandler } from '../lib/handler.js'
 import { retrieve } from '../services/rag.js'
 
 const router = Router()
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const CHAT_MODEL = process.env.ANTHROPIC_MODEL ?? 'claude-haiku-4-5-20251001'
 
 router.post('/', requireAuth, asyncHandler(async (req, res) => {
   const { message, history = [] } = req.body as {
@@ -18,9 +19,7 @@ router.post('/', requireAuth, asyncHandler(async (req, res) => {
     return
   }
 
-  // Retrieve relevant past validation chunks
   const chunks = await retrieve(message, 10)
-
   const sources = chunks.map(c => ({
     brand:    c.brand,
     category: c.category,
@@ -41,21 +40,19 @@ No inventás datos ni errores que no estén en el historial.`
 
   const userMessage = `${contextBlock}\n\nPREGUNTA DEL USUARIO:\n${message}`
 
-  // Build conversation for Gemini
-  const geminiHistory = history.map(h => ({
-    role: h.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: h.content }],
-  }))
-
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash',
-    systemInstruction: systemPrompt,
-    generationConfig: { maxOutputTokens: 1024, temperature: 0.2 },
+  const response = await client.messages.create({
+    model: CHAT_MODEL,
+    max_tokens: 1024,
+    temperature: 0.2,
+    system: systemPrompt,
+    messages: [
+      ...history.map(h => ({ role: h.role as 'user' | 'assistant', content: h.content })),
+      { role: 'user' as const, content: userMessage },
+    ],
   })
 
-  const chat = model.startChat({ history: geminiHistory })
-  const result = await chat.sendMessage(userMessage)
-  const answer = result.response.text()
+  const firstText = response.content.find(b => b.type === 'text')
+  const answer = firstText && firstText.type === 'text' ? firstText.text : ''
 
   res.json({ answer, sources })
 }, 'Chat failed'))

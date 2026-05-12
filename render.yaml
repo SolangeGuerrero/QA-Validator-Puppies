@@ -1,0 +1,41 @@
+# Render Blueprint — defines the API service
+# How to deploy:
+#   1. Push this repo to GitHub
+#   2. dashboard.render.com → New → Blueprint → Connect repo
+#   3. Render reads this file and creates the service
+#   4. Fill in the marked secrets in the dashboard
+services:
+  - type: web
+    name: puppies-api
+    runtime: docker
+    plan: free
+    region: oregon
+    rootDir: .
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: AI_PROVIDER
+        value: claude
+      - key: ANTHROPIC_MODEL
+        value: claude-haiku-4-5-20251001
+      # Secrets — set in the Render dashboard, NOT committed
+      - key: DATABASE_URL
+        sync: false
+      - key: INSFORGE_URL
+        sync: false
+      - key: INSFORGE_SERVICE_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: SENDGRID_FROM
+        sync: false
+      - key: WEB_URL
+        sync: false
