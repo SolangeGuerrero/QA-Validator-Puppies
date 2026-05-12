@@ -1,0 +1,64 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build output
+dist
+build
+out
+.next
+
+# Turborepo
+.turbo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+*.env
+
+# Postman (contienen URLs internas y credenciales de Nestlé — NO commitear)
+*.postman_collection.json
+*.postman_environment.json
+
+# Prisma generated client
+**/node_modules/.prisma
+**/src/generated/prisma
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Test coverage
+coverage
+.nyc_output
+
+# Uploads / temp files
+uploads
+tmp
+*.tmp
+
+# Documentation local (no commitear)
+doc

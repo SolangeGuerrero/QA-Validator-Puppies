@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+@import "./tokens.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Remap shadcn CSS variables → Puppies tokens */
+:root {
+  --background: var(--color-surface-primary);
+  --foreground: var(--color-foreground-primary);
+  --card: var(--color-surface-card);
+  --card-foreground: var(--color-foreground-primary);
+  --popover: var(--color-surface-elevated);
+  --popover-foreground: var(--color-foreground-primary);
+  --primary: var(--color-accent-primary);
+  --primary-foreground: var(--color-foreground-inverse);
+  --secondary: #F3F4F6;
+  --secondary-foreground: var(--color-foreground-primary);
+  --muted: #F3F4F6;
+  --muted-foreground: var(--color-foreground-muted);
+  --accent: #F3F4F6;
+  --accent-foreground: var(--color-foreground-primary);
+  --destructive: var(--color-error);
+  --destructive-foreground: #FFFFFF;
+  --border: var(--color-border-subtle);
+  --input: var(--color-border-subtle);
+  --ring: var(--color-accent-primary);
+  --radius: 0.5rem;
+}
+
+* {
+  border-color: var(--color-border-subtle);
+}
+
+body {
+  background-color: var(--color-surface-primary);
+  color: var(--color-foreground-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar refinado */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-subtle);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-foreground-muted);
+}
+
+/* Animaciones BrandCheck */
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(227, 0, 15, 0.4); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(227, 0, 15, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(227, 0, 15, 0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+/* ─── Dark mode — global surface overrides ─────────────────────────────────── */
+html.dark {
+  color-scheme: dark;
+
+  /* Surfaces */
+  & .bg-white { background-color: #13131A; }
+  & .bg-\[\#FAFAFA\] { background-color: #0A0A0F; }
+  & .bg-\[\#FFFFFF\] { background-color: #1E1E1C; }
+  & .bg-\[\#F3F4F6\] { background-color: rgba(255,255,255,0.05); }
+
+  /* Text */
+  & .text-\[\#0A0A0F\] { color: #FAFAFA; }
+  & .text-\[\#0F0F0D\] { color: #FAFAFA; }
+  & .text-\[\#3D3A35\] { color: #c5c1b9; }
+  & .text-\[\#5E5954\] { color: #8C8782; }
+  & .text-\[\#6B6760\] { color: #8C8782; }
+
+  /* Borders */
+  & .border-\[\#E5E7EB\] { border-color: rgba(255,255,255,0.1); }
+  & .border-\[\#F3F4F6\] { border-color: rgba(255,255,255,0.08); }
+  & .border-\[\#FAFAFA\] { border-color: rgba(255,255,255,0.05); }
+
+  /* Dividers */
+  & .divide-\[\#FAFAFA\] > :not([hidden]) ~ :not([hidden]) { border-color: rgba(255,255,255,0.05); }
+  & .divide-\[\#E5E7EB\] > :not([hidden]) ~ :not([hidden]) { border-color: rgba(255,255,255,0.1); }
+
+  /* Hover states */
+  & .hover\:bg-white:hover { background-color: #2A2A28; }
+  & .hover\:bg-\[\#FFFFFF\]:hover { background-color: #1E1E1C; }
+  & .hover\:bg-white\/60:hover { background-color: rgba(255,255,255,0.08); }
+
+  /* Form inputs */
+  & input, & textarea {
+    background-color: #2A2A28;
+    color: #FAFAFA;
+    border-color: rgba(255,255,255,0.1);
+  }
+  & input::placeholder, & textarea::placeholder { color: rgba(255,255,255,0.25); }
+}

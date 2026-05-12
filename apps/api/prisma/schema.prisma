@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  role      String   @default("analyst")
+  avatar    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Product {
+  id        String    @id @default(uuid())
+  name      String
+  sku       String    @unique
+  brand     String
+  category  String
+  status    String    @default("active")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  documents ProductDocument[]
+  assets    CreativeAsset[]
+
+  @@map("products")
+}
+
+model ProductDocument {
+  id        String   @id @default(uuid())
+  productId String   @map("product_id")
+  name      String
+  type      String
+  fileUrl   String   @map("file_url")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_documents")
+}
+
+model CreativeAsset {
+  id        String   @id @default(uuid())
+  productId String   @map("product_id")
+  userId    String   @map("user_id")
+  fileName  String   @map("file_name")
+  fileUrl   String   @map("file_url")
+  fileType  String   @map("file_type")
+  fileSize  Int?     @map("file_size")
+  status    String   @default("uploaded")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product     Product      @relation(fields: [productId], references: [id])
+  validations Validation[]
+
+  @@map("creative_assets")
+}
+
+model Validation {
+  id              String    @id @default(uuid())
+  creativeAssetId String    @map("creative_asset_id")
+  userId          String    @map("user_id")
+  status          String    @default("pending")
+  complianceScore Int?      @map("compliance_score")
+  summary         String?
+  totalIssues     Int       @default(0) @map("total_issues")
+  totalWarnings   Int       @default(0) @map("total_warnings")
+  totalPassed     Int       @default(0) @map("total_passed")
+  documentsUsed   Json?     @map("documents_used")
+  selectedDocumentIds String[] @default([]) @map("selected_document_ids")
+  startedAt       DateTime? @map("started_at")
+  completedAt     DateTime? @map("completed_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  asset  CreativeAsset     @relation(fields: [creativeAssetId], references: [id])
+  issues ValidationIssue[]
+
+  @@map("validations")
+}
+
+model ValidationIssue {
+  id           String  @id @default(uuid())
+  validationId String  @map("validation_id")
+  title        String
+  description  String
+  severity     String
+  category     String
+  suggestion   String?
+  positionX    Float?  @map("position_x")
+  positionY    Float?  @map("position_y")
+  positionW    Float?  @map("position_w")
+  positionH    Float?  @map("position_h")
+  status       String  @default("open")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  validation Validation @relation(fields: [validationId], references: [id], onDelete: Cascade)
+
+  @@map("validation_issues")
+}
