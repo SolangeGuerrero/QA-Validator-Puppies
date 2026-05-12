@@ -24,11 +24,11 @@ COPY packages/shared packages/shared
 COPY apps/api apps/api
 
 # Generate Prisma client + compile TypeScript
-RUN pnpm --filter @purina/api exec prisma generate \
- && pnpm --filter @purina/api build
+RUN pnpm --filter @puppies/api exec prisma generate \
+ && pnpm --filter @puppies/api build
 
 # Prune dev dependencies for the runtime image
-RUN pnpm --filter @purina/api prune --prod || true
+RUN pnpm --filter @puppies/api prune --prod || true
 
 # ── Stage 2: runtime ─────────────────────────────────────────────────────────
 FROM node:20-bookworm-slim AS runtime

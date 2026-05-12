@@ -26,7 +26,7 @@ ARG VITE_INSFORGE_ANON_KEY
 ENV VITE_INSFORGE_URL=$VITE_INSFORGE_URL
 ENV VITE_INSFORGE_ANON_KEY=$VITE_INSFORGE_ANON_KEY
 
-RUN pnpm --filter @purina/web build
+RUN pnpm --filter @puppies/web build
 
 # ── Stage 2: nginx runtime ───────────────────────────────────────────────────
 FROM nginx:alpine AS runtime
