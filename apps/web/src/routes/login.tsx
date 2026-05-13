@@ -220,20 +220,30 @@ function LoginPage() {
 
               {/* Demo mode quick access — only shown when VITE_DEMO_MODE=true */}
               {import.meta.env.VITE_DEMO_MODE === 'true' && mode === 'login' && (
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  onClick={async () => {
-                    setError(null)
-                    const err = await login('demo@puppies.dev', 'Demo2026!')
-                    if (err) setError(err)
-                    else navigate({ to: '/' })
-                  }}
-                  className="w-full h-10 mt-3 border-2 border-dashed border-[#FF5C39]/30 hover:border-[#FF5C39]/60 hover:bg-[#FF5C39]/[0.04] text-[#FF5C39] text-sm font-medium rounded-xl transition-all flex items-center justify-center gap-2"
-                >
-                  <Sparkles size={14} />
-                  Try the demo
-                </button>
+                <>
+                  <button
+                    type="button"
+                    disabled={isLoading}
+                    onClick={async () => {
+                      setError(null)
+                      const err = await login('demo@puppies.dev', 'Demo2026!')
+                      if (err) setError(err)
+                      else navigate({ to: '/' })
+                    }}
+                    className="w-full h-10 mt-3 border-2 border-dashed border-[#FF5C39]/30 hover:border-[#FF5C39]/60 hover:bg-[#FF5C39]/[0.04] text-[#FF5C39] text-sm font-medium rounded-xl transition-all flex items-center justify-center gap-2"
+                  >
+                    <Sparkles size={14} />
+                    Try the demo
+                  </button>
+                  <a
+                    href="https://drive.google.com/drive/folders/1HILlJM96yHv_NYbH0Bd_xeVyqc24_wzX"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-center text-[11px] text-[#6B7280] hover:text-[#8B5CF6] mt-3 transition-colors"
+                  >
+                    📦 Download sample artworks &amp; docs to test the validator →
+                  </a>
+                </>
               )}
 
               <div className="relative my-5">

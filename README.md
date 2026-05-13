@@ -2,6 +2,8 @@
 
 > 🎯 **Live demo:** [qa-validator-puppies.vercel.app](https://qa-validator-puppies.vercel.app) · click **"Try the demo"** on the login page (no signup needed)
 >
+> 📦 **Sample assets to try:** [Google Drive folder](https://drive.google.com/drive/folders/1HILlJM96yHv_NYbH0Bd_xeVyqc24_wzX) — 5 fictional Puppies products, each with 1 reference PDF + 3 packaging artworks (front/back/side). Each artwork has 2-3 deliberate compliance errors planted — see the README inside the folder for what to expect.
+>
 > Portfolio project — fictional pet food brand. Built with the same architecture as a real production system delivered to a Nestlé Argentina business unit.
 
 ---
