@@ -232,7 +232,7 @@ function LoginPage() {
                   className="w-full h-10 mt-3 border-2 border-dashed border-[#FF5C39]/30 hover:border-[#FF5C39]/60 hover:bg-[#FF5C39]/[0.04] text-[#FF5C39] text-sm font-medium rounded-xl transition-all flex items-center justify-center gap-2"
                 >
                   <Sparkles size={14} />
-                  Try the demo (read-only)
+                  Try the demo
                 </button>
               )}
 
